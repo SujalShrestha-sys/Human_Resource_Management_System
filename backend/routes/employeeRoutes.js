@@ -11,6 +11,6 @@ router.get("/:id",getEmployeeById)
 
 router.delete("/:id",deleteEmployee)
 
-router.put("/",updateEmployee)
+router.put("/:id",updateEmployee)
 
 export default router;

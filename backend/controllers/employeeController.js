@@ -1,4 +1,3 @@
-
 import Employee from '../models/employee.js';
 import bcrypt from 'bcryptjs';
 
@@ -94,26 +93,26 @@ const deleteEmployee = async (req, res) => {
     }
 }
 
- const updateEmployee =async (req,res)=>{
+const updateEmployee = async (req, res) => {
     try {
         const { id } = req.params;
         const updates = req.body;
-        if(updates.password) {
-            delete updates.password; 
+        if (updates.password) {
+            delete updates.password;
         }
 
-        const employee = await Employee.findByIdAndUpdate(id, updates, {
+        const updatedEmployee = await Employee.findByIdAndUpdate(id, {
             new: true,
             runValidators: true,
         });
-        if (!employee) {
+        if (!updateEmployee) {
             return res.status(404).json({
                 message: "employee not found",
             });
         }
         res.status(200).json({
             message: "employee updated successfully",
-            employee,
+            updatedEmployee
         });
     } catch (error) {
         res.status(500).json({
@@ -122,5 +121,5 @@ const deleteEmployee = async (req, res) => {
         });
     }
 }
-export { createEmployee, getEmployee, getEmployeeById, deleteEmployee,updateEmployee };
+export { createEmployee, getEmployee, getEmployeeById, deleteEmployee, updateEmployee };
 export default createEmployee;
