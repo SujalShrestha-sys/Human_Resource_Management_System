@@ -1,7 +1,5 @@
-import Employee from '../models/employee.js';
-import bcrypt from 'bcryptjs';
-
-
+import Employee from "../models/employee.js";
+import bcrypt from "bcryptjs";
 
 const createEmployee = async (req, res) => {
     try {
@@ -12,36 +10,34 @@ const createEmployee = async (req, res) => {
         res.status(201).json({
             success: true,
             message: "Employe created successfully",
-            data: savedEmployee
+            data: savedEmployee,
         });
     } catch (error) {
         console.error("Error creating employee:", error);
         res.status(500).json({
             success: false,
             message: "Error creating employee",
-            error: error.message
+            error: error.message,
         });
     }
-}
-const getEmployee = async (req, res) => {
+};
 
+const getEmployee = async (req, res) => {
     try {
         const employees = await Employee.find();
         res.status(200).json({
             success: true,
             message: "Employee retrieved successfully",
-            data: employees
-        })
+            data: employees,
+        });
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Error retriveing employees',
-            error: error.message
+            message: "Error retriveing employees",
+            error: error.message,
         });
     }
-}
-
-
+};
 
 const getEmployeeById = async (req, res) => {
     const { id } = req.params;
@@ -61,12 +57,11 @@ const getEmployeeById = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Error retrieving employee',
-            error: error.message
+            message: "Error retrieving employee",
+            error: error.message,
         });
     }
-
-}
+};
 const deleteEmployee = async (req, res) => {
     try {
         const { id } = req.params;
@@ -91,7 +86,7 @@ const deleteEmployee = async (req, res) => {
             error: error.message,
         });
     }
-}
+};
 
 const updateEmployee = async (req, res) => {
     try {
@@ -112,7 +107,7 @@ const updateEmployee = async (req, res) => {
         }
         res.status(200).json({
             message: "employee updated successfully",
-            updatedEmployee
+            updatedEmployee,
         });
     } catch (error) {
         res.status(500).json({
@@ -120,6 +115,12 @@ const updateEmployee = async (req, res) => {
             error: error.message,
         });
     }
-}
-export { createEmployee, getEmployee, getEmployeeById, deleteEmployee, updateEmployee };
+};
+export {
+    createEmployee,
+    getEmployee,
+    getEmployeeById,
+    deleteEmployee,
+    updateEmployee,
+};
 export default createEmployee;
