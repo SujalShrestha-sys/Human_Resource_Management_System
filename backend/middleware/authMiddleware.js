@@ -12,17 +12,10 @@ export const authenticateToken = async (req, res, next) => {
                 message: "unauthorized"
             })
         }
-
-        if (!Employee) {
-            return res.status(500).json({
-                status: false,
-                message: "Employee not found"
-            })
-        }
-
+        
         const decoded = jwt.verify(token, "a-string-secret-at-least-256-bits-long");
         req.employee = await Employee.findById(decoded.id).select("-password");
-
+        
         next();
     } catch (error) {
         console.log(error.message)
@@ -30,5 +23,21 @@ export const authenticateToken = async (req, res, next) => {
             status: false,
             message: "unauthorized"
         })
+    }
+}
+
+
+export const checkRole = (...allowedRoles) => {
+    return (req, res, next) => {
+        const userRole = req.employee?.role;
+
+        if (!allowedRoles.includes(userRole)) {
+            return res.status(403).json({
+                success: false,
+                message: `Access denied. only [${allowedRoles.join(", ")}] allowed.`,
+            })
+        }
+
+        next();
     }
 }
