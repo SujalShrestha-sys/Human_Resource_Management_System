@@ -32,7 +32,7 @@ dbConnection
 
 
 app.get("/",(req,res)=>{
-  res.send("Hello Muraaa jgg")
+  res.send("welcome to the world of backend")
 })
 
 app.listen(port, () => {
