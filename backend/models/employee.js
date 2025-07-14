@@ -16,7 +16,7 @@ const employeeSchema = new mongoose.Schema(
         },
         email: {
             type: String,
-            required: true,
+            required: true,  
             unique: true,
             lowercase: true,
             match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
