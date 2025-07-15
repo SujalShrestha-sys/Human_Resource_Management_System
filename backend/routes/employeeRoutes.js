@@ -2,10 +2,11 @@ import express from 'express';
 import { createEmployee, deleteEmployee, getEmployee, getEmployeeById, updateEmployee } from "../controllers/employeeController.js"
 import { checkRole } from '../middleware/authMiddleware.js';
 import { authenticateToken } from '../middleware/authMiddleware.js';
+import { upload } from '../utils/imageUpload.js';
 
 const router = express.Router();
 
-router.post("/", [authenticateToken, checkRole("admin", "manager")], createEmployee);
+router.post("/", [authenticateToken,upload.single("profileImage"), checkRole("admin", "manager")], createEmployee);
 
 router.get('/',authenticateToken, getEmployee);
 

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import Employee from "../models/employee.js";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 
 const login = async (req, res) => {
   try {
@@ -19,7 +19,7 @@ const login = async (req, res) => {
     console.log("Password match:", isMatch);
 
     if (!isMatch) {
-      return res.status(400).json({
+      return res.status(401).json({
         status: false,
         message: "Invalid email or password",
       });

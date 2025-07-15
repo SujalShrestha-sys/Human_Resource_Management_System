@@ -1,15 +1,46 @@
 import Employee from "../models/employee.js";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
+import { sendEmail } from "../utils/sendEmail.js";
 
 const createEmployee = async (req, res) => {
     try {
-        const employee = new Employee(req.body);
-        const hashedPassword = await bcrypt.hash(employee.password, 10);
-        employee.password = hashedPassword;
+        const { password, ...otherFields } = req.body;
+
+
+        if (!password) {
+            return res.status(400).json({
+                success: false,
+                message: "Password is required",
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const employee = new Employee({
+            ...otherFields,
+            password: hashedPassword,
+            profileImage: req.file?.filename, // save uploaded image filename
+        });
+
         const savedEmployee = await employee.save();
+        sendEmail(
+            employee.email,
+            'Welcome to Our Company',
+            `Hello ${employee.name},
+            Welcome to our company! We are glad to have you on board.
+            Your login credentials are as follows:
+            Email: ${employee.email}
+            Password: ${req.body.password}
+            
+            Please make sure to change your password after logging in for the first time.
+            
+            Thank you,
+            Admin`
+        );
+
         res.status(201).json({
             success: true,
-            message: "Employe created successfully",
+            message: "Employee created successfully",
             data: savedEmployee,
         });
     } catch (error) {
@@ -75,7 +106,7 @@ const deleteEmployee = async (req, res) => {
             res.status(200).json({
                 success: true,
                 message: "Employee delete successfully",
-                data : employee,
+                data: employee,
             });
         }
     } catch (error) {
@@ -96,7 +127,7 @@ const updateEmployee = async (req, res) => {
             delete updates.password;
         }
 
-        const updatedEmployee = await Employee.findByIdAndUpdate(id,updates, {
+        const updatedEmployee = await Employee.findByIdAndUpdate(id, updates, {
             new: true,
             runValidators: true,
         });
@@ -107,7 +138,7 @@ const updateEmployee = async (req, res) => {
         }
         res.status(200).json({
             message: "employee updated successfully",
-           data : updatedEmployee,
+            data: updatedEmployee,
         });
     } catch (error) {
         res.status(500).json({
